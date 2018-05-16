@@ -63,7 +63,7 @@ int array_realloc(Array *array, int new_capacity) {
 
     void* new_data = realloc(array->data, (size_t)new_capacity*array->elementSize);
     fail_if(new_data == NULL, eArray_allocationError, true);
-    
+
     array->capacity = new_capacity;
 
     return 0;
@@ -86,3 +86,12 @@ int array_insert(Array* array, void *element) {
 
     return 0;
 }
+
+void* array_get_at(Array* array, int index) {
+    validate_array(array, true);
+    fail_return(index >= array->size || index < 0, eArray_outOfRange);
+
+    return array->data + index*array->elementSize;
+}
+
+

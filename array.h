@@ -13,7 +13,8 @@ typedef enum ArrayError {
     eArray_invalidElementSize,
     eArray_invalidArgument,
     eArray_internalError,
-    eArray_invalidState
+    eArray_invalidState,
+    eArray_outOfRange,
 } ArrayError;
 
 extern ArrayError arrayErr;
