@@ -1,7 +1,7 @@
 #ifndef C_ARRAY_TESTS_H
 #define C_ARRAY_TESTS_H
 
-#include "array.h"
+#include "../src/array.h"
 
 void test_push_back();
 
