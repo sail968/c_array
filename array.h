@@ -4,6 +4,7 @@
 #include <stdlib.h>
 
 typedef enum ArrayError {
+
     eArray_noError,
     eArray_allocationError,
     eArray_argumentCanNotBeNull,
@@ -16,6 +17,7 @@ typedef enum ArrayError {
     eArray_invalidState,
     eArray_outOfRange,
     eArray_notFound,
+
 } ArrayError;
 
 extern ArrayError arrayErr;
@@ -37,10 +39,13 @@ int array_destruct(Array* array);
 
 int array_realloc(Array* array, int new_capacity);
 
-int array_insert(Array* array, void* element);
+int array_push_back(Array *array, void *element);
 
 int array_find_element(Array* array, void* item);
 
 int array_delete_element(Array* array, int index);
+
+int array_insert(Array* array, int index, void* item);
+
 
 #endif //C_ARRAY_ARRAY_H

@@ -10,7 +10,7 @@ void test_insert() {
     int i;
     for (i = 0; i < 10; ++i) {
         int x = i*2;
-        int result = array_insert(&array, &x);
+        int result = array_push_back(&array, &x);
         assert(result == 0);
     }
 

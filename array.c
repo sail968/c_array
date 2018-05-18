@@ -23,7 +23,7 @@ ArrayError arrayErr = eArray_noError;
     fail_if((array)->size < 0, eArray_invalidSize, do_return)               \
     fail_if((array)->capacity < 0, eArray_invalidCapacity, do_return)       \
     fail_if((array)->elementSize < 0, eArray_invalidElementSize, do_return) \
-    fail_if((array)->elementSize > (array)->capacity,                       \
+    fail_if((array)->size > (array)->capacity,                       \
             eArray_invalidState, do_return)       \
 
 
@@ -69,7 +69,7 @@ int array_realloc(Array *array, int new_capacity) {
     return 0;
 }
 
-int array_insert(Array* array, void *element) {
+int array_push_back(Array *array, void *element) {
     validate_array(array, true);
 
     assert(array->size <= array->capacity);
@@ -124,3 +124,23 @@ int array_delete_element(Array* array, int index) {
     return 0;
 }
 
+int array_insert(Array* array, int index, void* item) {
+    validate_array(array, true);
+
+    if (array->size == array->capacity) {
+        array_realloc(array, array->capacity*2);
+    }
+
+    for (int i = array->size; i >= index+1; --i) {
+        void* source = array->data + (i-1)*array->elementSize;
+        void* dest = array->data + i*array->elementSize;
+
+        memcpy(dest, source, array->elementSize);
+
+    }
+
+    memcpy(item, array->data + array->elementSize*index, array->elementSize);
+
+    return 0;
+
+}
