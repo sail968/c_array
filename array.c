@@ -94,4 +94,33 @@ void* array_get_at(Array* array, int index) {
     return array->data + index*array->elementSize;
 }
 
+int array_find_element(Array* array, void* item) {
+    validate_array(array, true);
+    for (int i = 0; i < array->size; ++i) {
+        if (memcmp(item, array->data + i*array->elementSize, array->elementSize) == 0) {
+            return i;
+        }
+    }
+
+    arrayErr = eArray_notFound;
+    return -1;
+}
+
+int array_delete_element(Array* array, int index) {
+    validate_array(array, true);
+
+    if (index < 0 || index >= array->size) {
+        arrayErr = eArray_outOfRange;
+        return -1;
+    }
+
+    for (int i = index; i < array->size - 1; ++i) {
+        void*   dest = array->data + i*array->elementSize;
+        void*   source = array->data + (i+1)*array->elementSize;
+
+        memcpy(dest, source, array->elementSize);
+    }
+
+    return 0;
+}
 

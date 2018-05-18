@@ -15,6 +15,7 @@ typedef enum ArrayError {
     eArray_internalError,
     eArray_invalidState,
     eArray_outOfRange,
+    eArray_notFound,
 } ArrayError;
 
 extern ArrayError arrayErr;
@@ -37,5 +38,9 @@ int array_destruct(Array* array);
 int array_realloc(Array* array, int new_capacity);
 
 int array_insert(Array* array, void* element);
+
+int array_find_element(Array* array, void* item);
+
+int array_delete_element(Array* array, int index);
 
 #endif //C_ARRAY_ARRAY_H
