@@ -64,27 +64,19 @@ int array_realloc(Array *array, int new_capacity) {
     void* new_data = realloc(array->data, (size_t)new_capacity*array->elementSize);
     fail_if(new_data == NULL, eArray_allocationError, true);
 
+    array->data = new_data;
+
+    if (array->size > array->capacity) {
+        array->size = array->capacity;
+    }
+
     array->capacity = new_capacity;
 
     return 0;
 }
 
-int array_push_back(Array *array, void *element) {
-    validate_array(array, true);
-
-    assert(array->size <= array->capacity);
-
-    if (array->size == array->capacity) {
-        array_realloc(array, array->capacity*2);
-    }
-
-    memcpy(array->data + (array->elementSize*array->size),
-           element,
-           (size_t)array->elementSize);
-
-    array->size++;
-
-    return 0;
+int array_push_back(Array *array, void *item) {
+    return array_insert_element(array, array->size, item);
 }
 
 void* array_get_at(Array* array, int index) {
@@ -120,12 +112,18 @@ int array_delete_element(Array* array, int index) {
 
         memcpy(dest, source, array->elementSize);
     }
+    array->size--;
 
     return 0;
 }
 
-int array_insert(Array* array, int index, void* item) {
+int array_insert_element(Array *array, int index, void *item) {
     validate_array(array, true);
+
+    if (index > array->size) {
+        arrayErr = eArray_outOfRange;
+        return -1;
+    }
 
     if (array->size == array->capacity) {
         array_realloc(array, array->capacity*2);
@@ -139,7 +137,8 @@ int array_insert(Array* array, int index, void* item) {
 
     }
 
-    memcpy(item, array->data + array->elementSize*index, array->elementSize);
+    memcpy(array->data + index*array->elementSize, item, array->elementSize);
+    array->size++;
 
     return 0;
 

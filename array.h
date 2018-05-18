@@ -39,13 +39,15 @@ int array_destruct(Array* array);
 
 int array_realloc(Array* array, int new_capacity);
 
-int array_push_back(Array *array, void *element);
+int array_push_back(Array *array, void *item);
+
+void* array_get_at(Array* array, int index);
 
 int array_find_element(Array* array, void* item);
 
 int array_delete_element(Array* array, int index);
 
-int array_insert(Array* array, int index, void* item);
+int array_insert_element(Array *array, int index, void *item);
 
 
 #endif //C_ARRAY_ARRAY_H
