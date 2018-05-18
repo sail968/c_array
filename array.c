@@ -112,6 +112,7 @@ int array_delete_element(Array* array, int index) {
 
         memcpy(dest, source, array->elementSize);
     }
+
     array->size--;
 
     return 0;
