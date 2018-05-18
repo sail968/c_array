@@ -120,7 +120,11 @@ void test_delete() {
 
     for (int i = 0; i < array.size; ++i) {
         int* value = (int*)array_get_at(&array, i);
-        assert(*value == i*2);
+        if (value == NULL) {
+            print_array_error();
+        } else {
+            assert(*value == i * 2);
+        }
     }
 
     array_destruct(&array);
@@ -163,5 +167,5 @@ void run_all_tests() {
     test_push_back();
     test_delete();
     test_find();
-    printf("all tests passed");
+    printf("all tests passed\n");
 }

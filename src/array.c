@@ -1,38 +1,33 @@
 #include <stdbool.h>
-#include <assert.h>
 #include <memory.h>
 #include "array.h"
 
 const size_t INITIAL_CAPACITY = 4;
 ArrayError arrayErr = eArray_noError;
 
-#define fail_if(condition, errValue, do_return)                             \
+#define fail_if(condition, errValue, return_value)                          \
     if (condition) {                                                        \
         arrayErr = errValue;                                                \
-        if ((do_return))                                                    \
-            return -1;                                                      \
+        return return_value;                                                \
     }
 
 
-#define fail_return(c, e) fail_if(c, e, true)
-
-
-#define validate_array(array, do_return)                                    \
-    fail_if((array) == NULL, eArray_argumentCanNotBeNull, do_return)        \
-    fail_if((array)->data == NULL, eArray_invalidData, do_return)           \
-    fail_if((array)->size < 0, eArray_invalidSize, do_return)               \
-    fail_if((array)->capacity < 0, eArray_invalidCapacity, do_return)       \
-    fail_if((array)->elementSize < 0, eArray_invalidElementSize, do_return) \
+#define validate_array(array, return_value)                                    \
+    fail_if((array) == NULL, eArray_argumentCanNotBeNull, return_value)        \
+    fail_if((array)->data == NULL, eArray_invalidData, return_value)           \
+    fail_if((array)->size < 0, eArray_invalidSize, return_value)               \
+    fail_if((array)->capacity < 0, eArray_invalidCapacity, return_value)       \
+    fail_if((array)->elementSize < 0, eArray_invalidElementSize, return_value) \
     fail_if((array)->size > (array)->capacity,                       \
-            eArray_invalidState, do_return)       \
+            eArray_invalidState, return_value)       \
 
 
 int array_construct(int elementSize, Array *array) {
-    fail_if(array == NULL, eArray_allocationError, true);
-    fail_return(elementSize <= 0, eArray_invalidArgument);
+    fail_if(array == NULL, eArray_allocationError, -1);
+    fail_if(elementSize <= 0, eArray_invalidArgument, -1);
 
     void* data = malloc(INITIAL_CAPACITY*elementSize);
-    fail_if(data == NULL, eArray_argumentCanNotBeNull, true);
+    fail_if(data == NULL, eArray_argumentCanNotBeNull, -1);
 
     int size = 0;
     int capacity = INITIAL_CAPACITY;
@@ -46,7 +41,7 @@ int array_construct(int elementSize, Array *array) {
 }
 
 int array_destruct(Array *array) {
-    fail_if(array == NULL, eArray_argumentCanNotBeNull, true);
+    fail_if(array == NULL, eArray_argumentCanNotBeNull, -1);
 
     array->size = 0;
     array->capacity = 0;
@@ -58,11 +53,11 @@ int array_destruct(Array *array) {
 }
 
 int array_realloc(Array *array, int new_capacity) {
-    validate_array(array, true);
-    fail_return(new_capacity < 0, eArray_invalidArgument);
+    validate_array(array, -1);
+    fail_if(new_capacity < 0, eArray_invalidArgument, -1);
 
     void* new_data = realloc(array->data, (size_t)new_capacity*array->elementSize);
-    fail_if(new_data == NULL, eArray_allocationError, true);
+    fail_if(new_data == NULL, eArray_allocationError, -1);
 
     array->data = new_data;
 
@@ -80,14 +75,15 @@ int array_push_back(Array *array, void *item) {
 }
 
 void* array_get_at(Array* array, int index) {
-    validate_array(array, true);
-    fail_return(index >= array->size || index < 0, eArray_outOfRange);
+    arrayErr = eArray_noError;
+    validate_array(array, NULL);
+    fail_if(index >= array->size || index < 0, eArray_outOfRange, NULL);
 
     return array->data + index*array->elementSize;
 }
 
 int array_find_element(Array* array, void* item) {
-    validate_array(array, true);
+    validate_array(array, -1);
     for (int i = 0; i < array->size; ++i) {
         if (memcmp(item, array->data + i*array->elementSize, array->elementSize) == 0) {
             return i;
@@ -99,7 +95,7 @@ int array_find_element(Array* array, void* item) {
 }
 
 int array_delete_element(Array* array, int index) {
-    validate_array(array, true);
+    validate_array(array, -1);
 
     if (index < 0 || index >= array->size) {
         arrayErr = eArray_outOfRange;
@@ -119,7 +115,7 @@ int array_delete_element(Array* array, int index) {
 }
 
 int array_insert_element(Array *array, int index, void *item) {
-    validate_array(array, true);
+    validate_array(array, -1);
 
     if (index > array->size) {
         arrayErr = eArray_outOfRange;
