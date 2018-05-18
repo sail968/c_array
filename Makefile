@@ -1,3 +1,5 @@
+run_and_clean: run clean
+
 run: tests c_array
 	gcc main.c tests.o c_array.o -o run
 
