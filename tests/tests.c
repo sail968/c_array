@@ -135,6 +135,7 @@ void test_delete() {
 
 void test_find() {
     printf("testing find\n");
+
     Array array;
     array_construct(sizeof(int), &array);
 
