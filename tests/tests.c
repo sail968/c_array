@@ -62,6 +62,7 @@ void fill_10000(Array *array) {
 }
 
 void test_push_back() {
+    printf("Testing push back\n");
     Array array;
     array_construct(sizeof(int), &array);
 
@@ -88,6 +89,7 @@ void test_push_back() {
 }
 
 void test_delete() {
+    printf("testing delete\n");
     Array array;
     int success = array_construct(sizeof(int), &array);
 
@@ -132,6 +134,7 @@ void test_delete() {
 }
 
 void test_find() {
+    printf("testing find\n");
     Array array;
     array_construct(sizeof(int), &array);
 

@@ -23,11 +23,11 @@ ArrayError arrayErr = eArray_noError;
 
 
 int array_construct(int elementSize, Array *array) {
-    fail_if(array == NULL, eArray_allocationError, -1);
+    fail_if(array == NULL, eArray_argumentCanNotBeNull, -1);
     fail_if(elementSize <= 0, eArray_invalidArgument, -1);
 
     void* data = malloc(INITIAL_CAPACITY*elementSize);
-    fail_if(data == NULL, eArray_argumentCanNotBeNull, -1);
+    fail_if(data == NULL, eArray_allocationError, -1);
 
     int size = 0;
     int capacity = INITIAL_CAPACITY;
